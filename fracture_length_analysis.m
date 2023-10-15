@@ -118,22 +118,26 @@ for b=1:length(events)
     subplot(2,3,b)
     scatter(dist_per_crack,length_frac,'MarkerFaceColor',c,'MarkerEdgeColor','none','MarkerFaceAlpha',0.1)
     hold on
-    set(gca,'XScale','log','YScale','log','FontSize',12)
+    set(gca,'XScale','log','YScale','log','FontSize',14)
     ylabel('Fracture length (m)')
     xlabel('Distance from fault (m)')
 
     box on
        if b == 4
             title('Ridgecrest foreshock')
+            Lmin = 1.8;
         elseif b == 5
             title('Ridgecrest mainshock')
+            Lmin = 2;
         elseif b == 2
             title('El Mayor-Cucapah')
+            Lmin = 20;
          elseif b == 3
-            title('Hector Mine')     
+            title('Hector Mine')   
+            Lmin = 10;
         else 
             title(event)
-    
+            Lmin = 60;
        end 
     
        %saveas(gcf,'length_dist.pdf');
@@ -150,10 +154,12 @@ for b=1:length(events)
     % Create the histogram counts for the log bins
     hist_counts = histcounts(length_frac, bin_edges);
     % plot hisgram
-    histogram('BinCounts',hist_counts,'BinEdges',bin_edges,'FaceColor',c)
+    histogram('BinCounts',hist_counts,'BinEdges',bin_edges,'FaceColor',c,'FaceAlpha',0.6)
+    hold on
+    xline(Lmin,'Color',c,'LineWidth',2)
     xlabel('Fracture length (m)');
     ylabel('Frequency');
-    set(gca,'XScale','log','YScale','log')
+    set(gca,'XScale','log','YScale','log','FontSize',14)
 
     if b == 4
             title('Ridgecrest foreshock')
@@ -165,9 +171,8 @@ for b=1:length(events)
             title('Hector Mine')     
         else 
             title(event)
-    
        end 
-       %saveas(gcf,'length_distribution.pdf');
+       saveas(gcf,'length_distribution.pdf');
 
 %%%%%%%%%%%%%%%%%%%%%%% plot distribution of fracture lengths along
 %%%%%%%%%%%%%%%%%%%%%%% strike of the rupture
@@ -203,6 +208,24 @@ for b=1:length(events)
     pt = interparc(0:(spacing/total_rupturelength):1,curvexy_x,curvexy_y,'linear'); 
     pt_x = pt(:,1);
     pt_y = pt(:,2);
+    
+    if pt_y(1)>pt_y(end)
+        disp(event)
+        disp('NS')
+    else
+        disp(event)
+        disp('SN')
+    end
+
+    if pt_x(end)>pt_x(1)
+        disp(event)
+        disp('WE')
+    else
+        disp(event)
+        disp('EW')
+    end
+
+        
     curvexy_dense = [pt_x pt_y];
     length_frac = [];
     
@@ -219,7 +242,7 @@ for b=1:length(events)
     figure(3)
     fig = gcf;
     fig.Units = 'inches';
-    fig.Position = [0, 0, 5, 10]; % [x, y, width, height]
+    fig.Position = [0, 0, 5, 13]; % [x, y, width, height]
 
     subplot(5,1,b);
     scatter(loc_along/1000,length_frac,10,length_frac, ...
@@ -231,10 +254,12 @@ for b=1:length(events)
     colormap spring
     colorbar
     xlim([0, max(loc_along)/1000])
-    set(gca,'ColorScale','log')
+    ylim([0.1, 3*10^3])
+    size(get(gca, 'YTick'))
+    set(gca,'ColorScale','log','FontSize',16)
     clim([0.1 1500]);
     box on
-    %saveas(gcf,'frac_length_profile.pdf');
+    saveas(gcf,'frac_length_profile.pdf');
 
 end
 
