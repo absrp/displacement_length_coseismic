@@ -180,47 +180,6 @@ end
         coordsxL = coordsxL(select_ID);
         coordsyL = coordsyL(select_ID);
 
-% need to deal with possibility of multiple slip per length here
- % plot D vs L
-    % figure(2)
-    % fig = gcf;
-    % fig.Units = 'inches';
-    % fig.Position = [0, 0, 10, 5]; % [x, y, width, height]
-    % subplot(2,3,i)
-    % scatter(largest_L, slip_L,'MarkerFaceColor',c,'MarkerEdgeColor','none','MarkerFaceAlpha',0.2)
-    % hold on
-    % set(gca,'XScale','log','YScale','log','FontSize',12)
-    % ylabel('Maximum slip (m)')
-    % xlabel('Fracture length (m)')
-    % 
-    % box on
-    %    if i == 4
-    %         title('Ridgecrest foreshock')
-    %     elseif i == 5
-    %         title('Ridgecrest mainshock')
-    %     elseif i == 2
-    %         title('El Mayor-Cucapah')
-    %      elseif i == 3
-    %         title('Hector Mine')     
-    %     else 
-    %         title(event)
-    % 
-    %    end 
-    %     set(gca,'FontSize',12)
-       %saveas(gcf,'scaling_nearest.pdf');
-    
-% figure
-% 
-% for b=1:numel(ID_L)
-%     nind = ID_L(b);
-%     plot(lines_secondary(nind).X,lines_secondary(nind).Y,'k')
-% hold on
-% end
-% 
-% scatter(coordsxL,coordsyL,30,slip_L,'filled')
-% colormap spring
-% colorbar
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%% now find locations where multiple slip values have been attributed to the
 %%%%%%%%%%%%%%%%%%%%%%%%%%% same fracture and select the maximum slip only 
 % Find unique values of ind and their corresponding indices

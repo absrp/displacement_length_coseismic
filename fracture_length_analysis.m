@@ -30,7 +30,7 @@ for b=1:length(events)
     event = events{b};
     info = event_info(event);
     c = info{1}; % event color
-    
+
     % subset spreadsheet to event data 
     name = displacement_data.eq_name; % subset event data from FDHI database
     idx = find(strcmp(name,event));
@@ -46,8 +46,8 @@ for b=1:length(events)
     strname = '_secondary_fractures.shp';
     combined_str_sec = append(event,strname);
     lines_secondary = shaperead(combined_str_sec); 
-
-%%%%%%%%%%%%%%%%%%%%%%% measure fracture length
+% 
+% %%%%%%%%%%%%%%%%%%%%%%% measure fracture length
 
     length_frac = [];
 
@@ -85,7 +85,7 @@ for b=1:length(events)
         [xy,distance(:,n),t_a] = distance2curve(curvexy,[pt_x pt_y],'linear');
     end
 
-    dist = min(distance,[],2);
+    dist = min(distance,[],2); % find minimum distance between rupture trace and fracture segment
 
     % find what fractures correspond to what minimum lengths
 
@@ -96,9 +96,9 @@ for b=1:length(events)
     
     appended = [dist ID];
     % Extract unique IDs
-    uniqueIDs = unique(appended(:, 2));
+    uniqueIDs = unique(appended(:, 2)); % find fracture IDs for segment groups
     % Initialize an array to store the smallest distance per ID
-    dist_per_crack = zeros(length(uniqueIDs), 2);
+    dist_per_crack = zeros(length(uniqueIDs),2);
     
     % Loop through unique IDs and find the smallest distance for each
     for i = 1:length(uniqueIDs)
@@ -108,21 +108,26 @@ for b=1:length(events)
         % Find the smallest distance for the current ID
         minDist = min(rows_with_currentID(:, 1));
         % Store the result in the dist_per_crack array
-        dist_per_crack(i, :) = [minDist, currentID];
+        dist_per_crack(i, :) = [minDist,currentID];
     end
 
-    figure(1)
+    figure(3)
     fig = gcf;
     fig.Units = 'inches';
     fig.Position = [0, 0, 10, 5]; % [x, y, width, height]
     subplot(2,3,b)
-    scatter(dist_per_crack,length_frac,'MarkerFaceColor',c,'MarkerEdgeColor','none','MarkerFaceAlpha',0.1)
+    scatter(dist_per_crack(:,1),length_frac,'MarkerFaceColor',c,'MarkerEdgeColor','none','MarkerFaceAlpha',0.1)
     hold on
     set(gca,'XScale','log','YScale','log','FontSize',14)
     ylabel('Fracture length (m)')
     xlabel('Distance from fault (m)')
 
-    box on
+box on
+    
+       %saveas(gcf,'length_dist.pdf');
+
+%%%%%%%%%%%%%%%%%%%%%%% plot length-magnitude distribution of fractures
+        box on
        if b == 4
             title('Ridgecrest foreshock')
             Lmin = 1.8;
@@ -139,11 +144,6 @@ for b=1:length(events)
             title(event)
             Lmin = 60;
        end 
-    
-       %saveas(gcf,'length_dist.pdf');
-
-%%%%%%%%%%%%%%%%%%%%%%% plot length-magnitude distribution of fractures
-    
     figure(2)
     fig = gcf;
     fig.Units = 'inches';
@@ -194,7 +194,7 @@ for b=1:length(events)
     refline_y = refline_y(~isnan(refline_y));   
     [curvexy_x, curvexy_y] = wgs2utm(refline_y,refline_x,11,'N');
     curvexy = [curvexy_x' curvexy_y'];
-    
+
     % measure total length
     x_1 = curvexy_x(1:end-1);
     x_2 = curvexy_x(2:end);
@@ -202,13 +202,14 @@ for b=1:length(events)
     y_2 = curvexy_y(2:end);
     segment = sqrt((x_1-x_2).^2+(y_1-y_2).^2); % note transformation to local coordinate system 
     total_rupturelength = sum(segment);
-    
+
     % densify ECS line
     spacing = 1; % discretizing rupture into 100 m spaced increments to resample
     pt = interparc(0:(spacing/total_rupturelength):1,curvexy_x,curvexy_y,'linear'); 
     pt_x = pt(:,1);
     pt_y = pt(:,2);
-    
+
+    % check whether ECS goes NS, SN, EW, or WE for each event
     if pt_y(1)>pt_y(end)
         disp(event)
         disp('NS')
@@ -225,10 +226,10 @@ for b=1:length(events)
         disp('EW')
     end
 
-        
+
     curvexy_dense = [pt_x pt_y];
     length_frac = [];
-    
+
     % find closest location between fracture and ECS line for each fracture
     for n = 1:length(lines_secondary)
         [loc_alongi,normalized_loc_alongi] = measure_location_along_rupture_frac(lines_secondary(n).X,lines_secondary(n).Y,curvexy_dense,total_rupturelength);
