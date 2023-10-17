@@ -140,9 +140,6 @@ for i=1:length(events)
     clim([0 5]);
     box on
     %saveas(gcf,'slip_profile.pdf');
-
-    figure(3)
-
     
 end 
 
