@@ -18,7 +18,6 @@ close all; clear; % clean up before starting
 displacement_data = readtable('data_FDHI.xlsx');
 events = {'Landers','EMC', 'HectorMine','Ridgecrest1','Ridgecrest2'}; 
 
-
 for i=1:length(events)
     event = events{i};
     info = event_info(event);
