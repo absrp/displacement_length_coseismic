@@ -45,7 +45,7 @@ Please report suggestions and issues:
 
 [@_absrp](https://twitter.com/_absrp) - alba@caltech.edu
 
-Project Link: [https://github.com/absrp/PFDHA_strikeslip](https://github.com/absrp/displacement_length_coseismic)
+Project Link: [https://github.com/absrp/displacement_length_coseismic](https://github.com/absrp/displacement_length_coseismic)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
