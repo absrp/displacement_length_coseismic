@@ -43,7 +43,7 @@ Each script is independent of the other ones so there is no need to run them in 
 
 Please report suggestions and issues:
 
-[@_absrp](https://twitter.com/_absrp) - alba@caltech.edu
+[@_absrp](https://twitter.com/_absrp) - alba@caltech.edu amrodriguezpadilla@gmail.com
 
 Project Link: [https://github.com/absrp/displacement_length_coseismic](https://github.com/absrp/displacement_length_coseismic)
 
