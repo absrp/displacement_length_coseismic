@@ -36,6 +36,8 @@ for i=1:length(events)
     type = subset_data.fps_meas_type;
     field = find(strcmp(type,'field')); % select field displacements only for narrow aperture
     subset_data = subset_data(field,:);
+    lateral = strcmpi(subset_data.fps_style, {'Right-Lateral'}) | strcmpi(subset_data.fps_style, {'Left-Lateral'});
+    subset_data = subset_data(lateral,:);
     slip = subset_data.recommended_net_preferred_for_analysis_meters; % FDHI preferred values
     slipidx = find(slip>0); % avoid artefacts (-999 kinda stuff) 
     slip = slip(slipidx);
@@ -143,37 +145,28 @@ for i=1:length(events)
     
 end 
 
+
 %% function dumpster
 function event_info = event_info(event) 
 if strcmp(event,'Landers')
     c = [0.6353    0.0784    0.1843];
     str1 = 'Landers';
-    str2 = 'Landers_Scracks.txt';
-    str3 = 'Landers_Dpoints.txt';
 elseif strcmp(event,'HectorMine')
     c = [0.1647    0.3843    0.2745];
     str1 = 'Hector Mine';
-    str2 = 'HectorMine_Scracks.txt';
-    str3 = 'HectorMine_Dpoints.txt';
 elseif strcmp(event,'Ridgecrest1')
     str1 = 'Ridgecrest foreshock';
     c = [0.8706    0.4902         0];
-    str2 = 'Ridgecrest1_Scracks.txt';
-    str3 = 'Ridgecrest1_Dpoints.txt';
 elseif strcmp(event,'Ridgecrest2')
     str1 = 'Ridgecrest mainshock';
     c = [0.4941    0.1843    0.5569];
-    str2 = 'Ridgecrest2_Scracks.txt';
-    str3 = 'Ridgecrest2_Dpoints.txt';
 elseif strcmp(event,'EMC')
     c = [0    0.6000    0.6000];
     str1 = 'El Mayor Cucapah';
-    str2 = 'EMC_Scracks.txt';
-    str3 = 'EMC_Dpoints.txt';
 else
     slip('Event name does not match database name')
 end
-    event_info = {c str1 str2 str3};
+    event_info = {c str1};
 end 
 function [total_rupturelength,loc_along,normalized_loc_along] = measure_location_along_rupture_disp(fault_x,fault_y,refline_x,refline_y,zone,hem)
 
@@ -196,7 +189,7 @@ pt_x = pt(:,1);
 pt_y = pt(:,2);
 curvexy_dense = [pt_x pt_y];
 
-[xy,~,~] = distance2curve(curvexy,[fault_x fault_y],'spline'); % find minimum distance between gate and ECS trace
+[xy,~,~] = distance2curve(curvexy,[fault_x fault_y],'spline'); % find minimum distance between displacement location and ECS trace
 locpt = dsearchn(curvexy_dense,xy);
 
 % segment length

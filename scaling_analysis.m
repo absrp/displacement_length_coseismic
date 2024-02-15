@@ -30,6 +30,8 @@ for i=1:length(events)
     type = subset_data.fps_meas_type;
     field = find(strcmp(type,'field')); % select field displacements only for narrow aperture
     subset_data = subset_data(field,:);
+    lateral = strcmpi(subset_data.fps_style, {'Right-Lateral'}) | strcmpi(subset_data.fps_style, {'Left-Lateral'});
+    subset_data = subset_data(lateral,:);
     slip = subset_data.recommended_net_preferred_for_analysis_meters; % FDHI preferred values
     slipidx = find(slip>0); % avoid artefacts (-999 kinda stuff) 
     slip = slip(slipidx);
@@ -149,9 +151,14 @@ end
         saveas(gcf,'scaling_maxD_longestL_10m.pdf');
 
 
-        % test plot to ensure each crack has a single displacemnet
+        % test plot to ensure each crack has a single displacement
         % measurement and only cracks with displacements are selected
-        figure
+         figure(2)
+         fig = gcf;
+         fig.Units = 'inches';
+         fig.Position = [0, 0, 10, 5]; % [x, y, width, height]
+         subplot(2,3,i)
+
         
         for b=1:numel(IDselect)
             nind = IDselect(b);
@@ -159,11 +166,33 @@ end
         hold on
         end
         
-        scatter(coordsxL(max_slip_indices),coordsyL(max_slip_indices),30,max_slip_values,'filled')
+        scaling = max_slip_values./L_maxdisp;
+        scatter(coordsxL(max_slip_indices),coordsyL(max_slip_indices),30,scaling,'filled')
         colormap spring
         colorbar
+        set(gca,'ColorScale','log')
+        cb = colorbar(); 
+        set(gca,'FontSize',14)
+        ylabel(cb,'Maximum displacement/length','FontSize',12,'Rotation',270)
         axis equal
+        xlabel('Longitude')
+        ylabel('Latitude')
+        clim([10^-4, 10^-1
+       box on
+       if i == 4
+            title('Ridgecrest foreshock')
+        elseif i == 5
+            title('Ridgecrest mainshock')
+        elseif i == 2
+            title('El Mayor-Cucapah')
+         elseif i == 3
+            title('Hector Mine')     
+        else 
+            title(event)
 
+       end 
+saveas(gcf,['scaling_maxD_longestL_map' ...
+    '.pdf']);
 end 
 
 %% function dumpster

@@ -336,6 +336,7 @@ end
 end
 end
 function [loc_along,normalized_loc_along] = measure_location_along_rupture_frac(fault_x,fault_y,curvexy_dense,total_rupturelength)
+
 fault_x = fault_x(~isnan(fault_x)); % removes NaN artifact at end of each fault in shapefile
 fault_y = fault_y(~isnan(fault_y));
 
