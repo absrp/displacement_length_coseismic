@@ -19,8 +19,7 @@ A set of scripts to analyze the distribution of surface displacements and fractu
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This repository contains the scripts and data required to reproduce the results in Rodriguez Padilla and Oskin 202N. 
-
+This repository contains the scripts and data required to analyze the distribution of fracture lengths and displacements from ECSZ events.
 The data from the Landers, Hector Mine, El Mayor Cucapah, and Ridgecrest (foreshock and mainshock) earthquakes is available in the raw data directory. All figures in the manuscript can be generated using these scripts and data. 
 
 ### Prerequisites
