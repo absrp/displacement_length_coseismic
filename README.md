@@ -49,8 +49,6 @@ Project Link: [https://github.com/absrp/displacement_length_coseismic](https://g
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-Manuscript Link: * in review, stay tuned *
-
 
 
 
